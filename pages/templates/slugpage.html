@@ -1,0 +1,66 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+    {% for i in page %}
+  <title>{{i.title}} </title>
+  {% endfor %}
+<style>
+    .float-end a i{
+      font-size: 40px;
+      color:rgb(0, 0, 0);
+      padding-left: 0px;
+    }
+    .float-end a i:hover{
+      color:blueviolet;
+      transform: scale(1.3);
+    }
+    
+</style>
+</head>
+<body>
+    
+    {% include 'header.html' %}
+
+    
+<body>
+<div class="container" id="main">
+    {% if no_data == False %}
+{%for i in page%}
+
+    
+   {{i.content|safe}}
+   
+ 
+    {%endfor%}  
+    {%endif%}  
+    {% for x in languages %}
+    {% if 'locale' in request.session %}
+    {% if no_data == True and request.session.locale == x.locale %}
+    <div class="container">
+      <div class="row text-center">
+          <div class="col-md-12">
+              <div class="error-template">
+                  <h1>
+                      Oops!</h1>
+                  <h2>
+                      No Data Found For {{x.title}}</h2>
+                  <div class="error-details">
+                      Sorry, an error has occured, Requested Language page not found!
+                  </div>
+                  
+              </div>
+          </div>
+      </div>
+  </div>
+  
+    {%endif%}
+    {%endif%}
+    {%endfor%}
+   
+    <p class="float-end" style="text-align: right;"><br><a href="#"><i class="fa fa-arrow-circle-up"></i></a></p>
+    
+</div>
+    {% include 'footer.html'%}
+
+</body>
+</html>

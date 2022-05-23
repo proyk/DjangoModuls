@@ -1,0 +1,79 @@
+{% load static %}
+<link href="//netdna.bootstrapcdn.com/twitter-bootstrap/2.3.2/css/bootstrap-combined.min.css" rel="stylesheet" id="bootstrap-css">
+<script src="//netdna.bootstrapcdn.com/twitter-bootstrap/2.3.2/js/bootstrap.min.js"></script>
+<script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
+<link href="//netdna.bootstrapcdn.com/bootstrap/3.1.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+<script src="//netdna.bootstrapcdn.com/bootstrap/3.1.0/js/bootstrap.min.js"></script>
+<script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
+<!------ Include the above in your HEAD tag ---------->
+<div class="container">
+  <div class="row">
+    <div class="span12">
+      <div class="head">
+        <div class="row-fluid">
+            <div class="span12">
+                <div class="span6">
+                    <h1 class="muted">Trasnlate Era</h1>
+                </div>
+
+                <div class="span4 offset2" style="margin-top:15px;">
+                    <form method="post">
+                        {% csrf_token %}
+                    <select id="language">
+                        {% for i in languages %}
+                        {% if request.session.locale == i.locale %}
+                        <option value="{{i.locale}}" selected>{{i.title}}</option>
+                        {%else%}
+                        <option value="{{i.locale}}" >{{i.title}}</option>
+                        {%endif%}
+                        {% endfor %}
+                    </select>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <div class="navbar">
+            <div class="navbar-inner">
+                <div class="container">
+                    <ul class="nav">
+                        
+                        {% for i in pages %}
+                        <li>
+                                <a href="/{{i.slug}}">{{i.slug}}</a>
+                         </li>
+                        {% endfor %}
+
+                        
+                    </ul>
+                    
+                </div>
+            </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% block javascript %}
+<script src="https://code.jquery.com/jquery-3.5.1.js" integrity="sha256-QWo7LDvxbWT2tbbQ97B53yJnYU3WhH/C8ycbRAkjPDc=" crossorigin="anonymous"></script>
+<script>
+    $("#language").change(function () {
+        const localeLanguage = $(this).val();// get the selected language ID from the HTML dropdown list 
+        
+        $.ajax({                       // initialize an AJAX request
+            type: "POST",
+            url: '{% url "change_languages" %}',
+            data: {
+                'localeLanguage': localeLanguage,       // add the language locale to the POST parameters
+                
+                'csrfmiddlewaretoken':$('input[name=csrfmiddlewaretoken]').val(),
+            },
+            success: function (data) {   // `data` is from `change_languages` view function
+                location.reload();          
+            }
+        });
+        
+    });
+</script>
+{% endblock javascript %}
