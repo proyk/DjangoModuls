@@ -36,3 +36,4 @@ def change_languages(request):
             "Tag":"Success",
         }
         return JsonResponse(msg)
+
