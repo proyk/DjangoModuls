@@ -1,5 +1,5 @@
 from asyncio.windows_events import NULL
-from turtle import title
+from turtle import title, update
 from django.contrib import admin
 
 from pages.models import page
@@ -18,12 +18,26 @@ class PageAdmin(admin.ModelAdmin):
     
     
     def changeform_view(self, request, obj_id, form_url, extra_context=None):
+        global pages
+        
         if request.method=="POST":
             if "updateContent" in request.POST:
-                print("Updating")
+                pageForm=PageForm(request.POST,instance=pages)
+                slugData=request.POST.get("slug")
+                pageData=page.objects.filter(slug=slugData)
+                langs=language.objects.all()
+                for lang in langs:
+                    titleData=request.POST.get(lang.title+"title")
+                    contentData=request.POST.get(lang.title+"content")
+                    updateContent=content.objects.get(contentId=request.POST.get(lang.title+'id'))
+                    updateContent.page=pageData.get()
+                    updateContent.language=lang
+                    updateContent.title=titleData
+                    updateContent.content=contentData
+                    updateContent.save()
             else:
                 slugData=request.POST.get("slug")
-                print(request.POST)
+                
                 pageForm=PageForm(request.POST)
                 pageForm.save()
                 
@@ -52,24 +66,17 @@ class PageAdmin(admin.ModelAdmin):
             return super().changeform_view(request, obj_id, form_url,{'label':label,'pageForm':pageForm,'languages':languages,'contentForm':contentForm})
         else:
             label="update"
+            pages=page.objects.get(slug=obj_id)
             languages = language.objects.filter(status="enabled")
             initial_dict={}
             
             pagedetails = content.objects.raw(" select * from translationPage_content join pages_page on translationPage_content.page_id=pages_page.slug where pages_page.slug='"+obj_id+"'")
             
-            pages=page.objects.filter(slug=obj_id)
-            for i in pages:
-                initial_dict = {
-                    
-                    "slug" : i.slug,
-                    "status" : i.status,
-                    "sortOrder":i.sortOrder
-                   
-                }
+            
+            
 
-            for x in pagedetails:
-                print(x.language_id)
-            pageForm=PageForm(initial = initial_dict)
+            
+            pageForm=PageForm(instance=pages)
             return super().changeform_view(request, obj_id, form_url,{'label':label,'languages':languages,'PageData':pagedetails,'pageForm':pageForm})
         
     
