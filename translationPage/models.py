@@ -7,8 +7,8 @@ class content(models.Model):
     language = models.ForeignKey(language,on_delete = models.CASCADE,null=False,default=get_language)
     page = models.ForeignKey(page,on_delete = models.CASCADE,null=False)
     contentId = models.AutoField(primary_key=True)
-    title = models.CharField(max_length=100)
-    content = tinymce_models.HTMLField()
+    title = models.CharField(max_length=100,null=False)
+    content = tinymce_models.HTMLField(null=False)
 
     
     def __str__(self):
