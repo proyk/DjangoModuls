@@ -1,4 +1,4 @@
-'''from django.contrib import admin
+from django.contrib import admin
 
 from translationPage.models import content
 
@@ -6,4 +6,3 @@ from translationPage.models import content
 class ContentAdmin(admin.ModelAdmin):
     model = content
     list_display = ['title','language','page',]
-'''

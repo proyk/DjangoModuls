@@ -40,6 +40,8 @@ INSTALLED_APPS = [
     'languages',
     'pages',
     'translationPage',
+    'attribute',
+    'attribute_translate',
     'tinymce',
 ]
 
@@ -97,7 +99,7 @@ WSGI_APPLICATION = 'translate.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'translateDjango',
+        'NAME': 'codex',
         'USER': 'root',
         'PASSWORD': 'root',
         'HOST': 'localhost',

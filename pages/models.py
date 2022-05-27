@@ -2,8 +2,8 @@ from django.db import models
 from django.urls import reverse
 # Create your models here.
 class page(models.Model):
-    
-    slug = models.SlugField(unique=True,primary_key=True)
+    id=models.AutoField(primary_key=True)
+    slug = models.SlugField(unique=True)
     statusChoice = (
         ('enabled','Enabled'),
         ('disabled','Disabled'),

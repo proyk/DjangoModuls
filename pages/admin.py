@@ -24,7 +24,8 @@ class PageAdmin(admin.ModelAdmin):
             if "updateContent" in request.POST:
                 pageForm=PageForm(request.POST,instance=pages)
                 slugData=request.POST.get("slug")
-                pageData=page.objects.filter(slug=slugData)
+                pageData=page.objects.filter(id=obj_id)
+                
                 langs=language.objects.all()
                 for lang in langs:
                     titleData=request.POST.get(lang.title+"title")
@@ -66,12 +67,12 @@ class PageAdmin(admin.ModelAdmin):
             return super().changeform_view(request, obj_id, form_url,{'label':label,'pageForm':pageForm,'languages':languages,'contentForm':contentForm})
         else:
             label="update"
-            pages=page.objects.get(slug=obj_id)
+            pages=page.objects.get(id=obj_id)
             languages = language.objects.filter(status="enabled")
             initial_dict={}
             
-            pagedetails = content.objects.raw(" select * from translationPage_content join pages_page on translationPage_content.page_id=pages_page.slug where pages_page.slug='"+obj_id+"'")
-            
+            pagedetails = content.objects.raw(" select * from translationPage_content join pages_page on translationPage_content.page_id=pages_page.id where pages_page.id='"+obj_id+"'")
+            print(pagedetails)
             
             
 
