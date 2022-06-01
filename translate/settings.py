@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     'translationPage',
     'attribute',
     'attribute_translate',
+    'attribute_option',
     'tinymce',
 ]
 
