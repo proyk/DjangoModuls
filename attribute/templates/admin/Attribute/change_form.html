@@ -12,9 +12,10 @@
         
     var id_regex = new RegExp('(' + prefix + '-\\d+-)');
     var replacement = prefix + '-' + ndx + '-';
-    
+    console.log(replacement);
     if ($(el).attr("for")) $(el).attr("for", $(el).attr("for").replace(id_regex,
     replacement));
+    
     if (el.id) el.id = el.id.replace(id_regex, replacement);
     if (el.name) el.name = el.name.replace(id_regex, replacement);
 }
@@ -101,7 +102,8 @@ function deleteForm(btn, prefix) {
     </script>
 <script >
 $(document).ready(function(){
-    $("#customOptions").hide();
+    
+    
   $("#id_inputType").change(function(){
     var selection=$(this).val();
     if(selection=="checkbox" || selection=="multi-select" || selection=="select" || selection=="radio")
@@ -165,11 +167,14 @@ $(document).ready(function(){
         </tr>
         <tr>
             <td colspan="2">
+               
+                {% if label == "add" %}
             <div id="customOptions" style="display: none;">
                 
                 <table class="table form-table table-bordered table-sm">
                     <thead class="text-center">
                     <tr>
+                        <th>Custom Labels (Language)</th>
                         <th>Custom Field</th>
                         <th>Sort Order</th>
                         <th>Is Default</th>
@@ -177,8 +182,17 @@ $(document).ready(function(){
                     </tr>
                     </thead>
                     <tbody>
+                        {{ formset.management_form }}
                     {% for form_data in formset %}
                         <tr class="item">
+                            <td>
+                            
+                                {% for lang in languageList %}
+                                    Option Lable[{{lang.locale}}] 
+                                    <input type="text" name="{{lang.locale}}options-0-optionsLabel" class="formset-field" maxlength="10" id="id_options-0-optionsLabel"><br>
+                                {% endfor %}
+                            
+                            </td>
                             <td>
                                 {{ form_data.customOption }}
                             </td>
@@ -209,13 +223,89 @@ $(document).ready(function(){
                     </tr>
                     </tbody>
                 </table>
-                {{ formset.management_form }}
+                
                            
                             
                             
                 
                 
             </div>
+            {% endif %}
+            {% if label == "update" and no_data %}
+            <div id="customOptions" >
+                
+                <table class="table form-table table-bordered table-sm">
+                    <thead class="text-center">
+                    <tr>
+                        <th>Custom Labels (Language)</th>
+                        <th>Custom Field</th>
+                        <th>Sort Order</th>
+                        <th>Is Default</th>
+                        <th></th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                        
+                        
+                        {%for custom in customData %}
+                        <tr class="item">
+                            
+                                
+                            <td>
+                                    {% for data in updateData %}
+                                        {% if data.optionId == custom.optionId %}
+                                        <input type="hidden" name="{{data.optionTranslateId}}customOptionId" value="{{custom.optionId}}">
+                                        <input type="hidden" name="{{custom.optionId}}{{data.languageId_id}}OptionLabelid" value="{{data.optionTranslateId}}">
+                                            Option Lable[{{data.languageId_id}}] 
+                                    
+                                            <input type="text" name="{{custom.optionId}}-{{data.languageId_id}}" value="{{data.optionsLabel}}" class="formset-field" maxlength="10" id="id_options-0-optionsLabel"><br>
+                                        {% endif %}
+                                    {% endfor %}
+                                
+                                </td>
+                            
+                            <td>
+                                <input type="text" name="{{custom.optionId}}customOption" class="formset-field" value="{{custom.customOption}}" maxlength="100" id="id_options-0-customOption">
+                            </td>
+                            <td>
+                                
+                                <input type="number" name="{{custom.optionId}}customSortOrder" value="{{custom.sortOrder}}"  class="formset-field" id="id_options-0-sortOrder">
+                            
+                            </td>
+                            <td>
+                                <input type="checkbox" name="{{custom.optionId}}customIsDefault" {% if custom.isDefault == True %} checked {% endif %}  class="formset-field" id="id_options-0-isDefault">
+                            </td>
+                            
+                            <td>
+                                <button type="button" class="btn btn-danger btn-sm remove-form-row"
+                                        id="{{ formset.prefix }}">
+                                  
+                                    Delete
+                                </button>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                         
+                    <tr>
+                    
+                        <td colspan="9"
+                            style="border-left: none!important; border-right: none !important; border-bottom: none!important;">
+                            <button type="button" class="btn btn-sm btn-success add-form-row"
+                                    id="{{ formset.prefix }}">
+                               Add
+                            </button>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+                
+                           
+                            
+                            
+                
+                
+            </div>
+            {% endif %}
             </td>
         </tr>
         {% if label == "update" %}

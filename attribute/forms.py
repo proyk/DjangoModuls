@@ -2,7 +2,7 @@ from django import forms
 
 from attribute_translate.models import AttributeTranslate 
 from attribute.models import AttributeFields
-from attribute_option.models import options
+from attribute_option.models import options,OptionTranslate
 from django.forms import formset_factory
 class AttributeTranslateForm(forms.ModelForm):
     
@@ -27,6 +27,14 @@ class AttributeOptionForm(forms.ModelForm):
             'isDefault': forms.CheckboxInput(attrs={'class': 'formset-field'}),
 		}
 
-        
-
+class optionTranslateForm(forms.ModelForm):
+    class Meta:
+        model=OptionTranslate
+        fields=[
+            'optionsLabel'
+        ]
+        widgets={
+            'optionsLabel':forms.TextInput(attrs={'class':'formset-field'}),
+        }
+OptionTranslateFormSet=formset_factory(optionTranslateForm,extra=1)
 AttributeOptionFormSet=formset_factory(AttributeOptionForm, extra=1)

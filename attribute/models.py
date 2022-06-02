@@ -1,6 +1,7 @@
 from cProfile import label
 from django.db import models
 
+
 # Create your models here.
 class AttributeFields(models.Model):
     attributeId = models.AutoField(primary_key=True)
@@ -21,5 +22,6 @@ class AttributeFields(models.Model):
     def __str__(self):
         return str(self.code)
     
+
 
   
