@@ -84,7 +84,7 @@ function deleteForm(btn, prefix) {
           for (formCount = forms.length; i < formCount; i++) {
               $(forms.get(i)).find('.formset-field').each(function () {
                   updateElementIndex(this, prefix, i);
-                  alert(i);
+                  
               });
           }
       } // End if
@@ -278,7 +278,7 @@ $(document).ready(function(){
                             
                             <td>
                                 <button type="button" class="btn btn-danger btn-sm remove-form-row"
-                                        id="{{ formset.prefix }}">
+                                        >
                                   
                                     Delete
                                 </button>
@@ -288,14 +288,46 @@ $(document).ready(function(){
                          
                     <tr>
                     
-                        <td colspan="9"
-                            style="border-left: none!important; border-right: none !important; border-bottom: none!important;">
-                            <button type="button" class="btn btn-sm btn-success add-form-row"
-                                    id="{{ formset.prefix }}">
-                               Add
-                            </button>
-                        </td>
-                    </tr>
+                        
+                        {{ formset.management_form }}
+                        {% for form_data in formset %}
+                            <tr class="item">
+                                <td>
+                                
+                                    {% for lang in languageList %}
+                                        Option Lable[{{lang.locale}}] 
+                                        <input type="text" name="{{lang.locale}}options-0-optionsLabel" class="formset-field" maxlength="10" id="id_options-0-optionsLabel"><br>
+                                    {% endfor %}
+                                
+                                </td>
+                                <td>
+                                    {{ form_data.customOption }}
+                                </td>
+                                <td>
+                                    {{ form_data.sortOrder }}
+                                </td>
+                                <td>
+                                    {{ form_data.isDefault }}
+                                </td>
+                                <td>
+                                    <button type="button" class="btn btn-danger btn-sm remove-form-row"
+                                            id="{{ formset.prefix }}">
+                                      
+                                        Delete
+                                    </button>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                        <tr>
+                        
+                            <td colspan="9"
+                                style="border-left: none!important; border-right: none !important; border-bottom: none!important;">
+                                <button type="button" class="btn btn-sm btn-success add-form-row"
+                                        id="{{ formset.prefix }}">
+                                   Add
+                                </button>
+                            </td>
+                        </tr>
                     </tbody>
                 </table>
                 

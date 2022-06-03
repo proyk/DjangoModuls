@@ -38,7 +38,17 @@ class AttributeFieldsAdmin(admin.ModelAdmin):
 
                         updateLabels.save()
                     optionsData=options.objects.filter(fieldId_id=obj_id)
+                    
                     for i in optionsData:
+                        updateCustomOption=options.objects.get(optionId=i.optionId)
+                        updateCustomOption.customOption=request.POST.get(str(i.optionId)+"customOption")
+                        updateCustomOption.sortOrder=request.POST.get(str(i.optionId)+"customSortOrder")
+                        if request.POST.get(str(i.optionId)+"customIsDefault")=="on":
+                            updateCustomOption.isDefault=True
+                        else:
+                            updateCustomOption.isDefault=False
+                        updateCustomOption.fieldId=attribute
+                        updateCustomOption.save()
                         for langs in languageList:
                             updateOptionLabels=OptionTranslate(optionTranslateId=request.POST.get(str(i.optionId)+langs.locale+"OptionLabelid"))
                             getOptionLabel=request.POST.get(str(i.optionId)+"-"+langs.locale)
@@ -47,6 +57,31 @@ class AttributeFieldsAdmin(admin.ModelAdmin):
                             updateOptionLabels.languageId=langs
                             updateOptionLabels.optionId=i
                             updateOptionLabels.save()
+                    no_custom=0
+                    for form in formset:
+                        
+                        if len(form["customOption"].data)==0:
+                            no_custom=1
+                            
+                        else:
+                            data2=form.save(commit=False)
+                            
+                            data2.fieldId=attribute
+                            data2.save()
+                    if request.POST.get("options-TOTAL_FORMS")!=None:
+                        for i in range(0,int(request.POST.get("options-TOTAL_FORMS"))):
+                            for langs in languageList:
+                                getLable=request.POST.get(langs.locale+"options-"+str(i)+"-optionsLabel")
+                                
+                                if no_custom!=1:
+
+                                    saveOptionTranslate=OptionTranslate()
+                                    saveOptionTranslate.optionsLabel=getLable
+                                    saveOptionTranslate.languageId=langs
+                                    optionId=options.objects.get(customOption=request.POST.get("options-"+str(i)+"-customOption"))
+                                    saveOptionTranslate.optionId=optionId
+                                    saveOptionTranslate.save()
+                    
                 else:
                     AttributesFieldsForm(request.POST).save()
                     attribute=AttributeFields.objects.get(code=request.POST.get("code"))
@@ -116,6 +151,6 @@ class AttributeFieldsAdmin(admin.ModelAdmin):
             
                 
 
-            return super().changeform_view(request, obj_id, form_url,{'customData':customData,'no_data':no_data,'updateData':data,'label':label,'attributeTranslateLabel':attributeTranslateLabel,'attributeTranslateForm':attributeTranslateForm,'languageList':languageList,'attributeFieldsForm':attributeFieldsForm})
+            return super().changeform_view(request, obj_id, form_url,{'customData':customData,'no_data':no_data,'updateData':data,'label':label,'attributeTranslateLabel':attributeTranslateLabel,'attributeTranslateForm':attributeTranslateForm,'languageList':languageList,'attributeFieldsForm':attributeFieldsForm,'formset': formset,'optionFormset':optionFormSet})
 admin.site.register(AttributeFields,AttributeFieldsAdmin)
 
