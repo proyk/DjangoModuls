@@ -102,9 +102,17 @@ function deleteForm(btn, prefix) {
     </script>
 <script >
 $(document).ready(function(){
-    
+    var getSelection=$("#id_inputType").val();
+    if(getSelection=="checkbox" || getSelection=="multi-select" || getSelection=="select" || getSelection=="radio")
+    {
+        $("#customOptions").show();
+    }
+    else{
+        $("#customOptions").hide();
+    }
     
   $("#id_inputType").change(function(){
+    
     var selection=$(this).val();
     if(selection=="checkbox" || selection=="multi-select" || selection=="select" || selection=="radio")
     {
@@ -231,7 +239,7 @@ $(document).ready(function(){
                 
             </div>
             {% endif %}
-            {% if label == "update" and no_data %}
+            {% if label == "update" %}
             <div id="customOptions" >
                 
                 <table class="table form-table table-bordered table-sm">

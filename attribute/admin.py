@@ -24,63 +24,67 @@ class AttributeFieldsAdmin(admin.ModelAdmin):
         if request.method=="POST":
             
             
-            print("--------------------")
+            
             try:
                 
                 if "updateContent" in request.POST:
                     AttributesFieldsForm(request.POST,instance=attributeFields).save()
                     attribute=AttributeFields.objects.get(code=request.POST.get("code"))
+                    
+
+
+                        
                     for langs in languageList:
                         updateLabels=AttributeTranslate(attributeTranslateId=request.POST.get(langs.title+"id"))
+                        
                         updateLabels.fieldLabel=request.POST.get(langs.title+"fieldLabel")
                         updateLabels.languageId=langs
                         updateLabels.fieldId=attribute
-
                         updateLabels.save()
                     optionsData=options.objects.filter(fieldId_id=obj_id)
-                    
-                    for i in optionsData:
-                        updateCustomOption=options.objects.get(optionId=i.optionId)
-                        updateCustomOption.customOption=request.POST.get(str(i.optionId)+"customOption")
-                        updateCustomOption.sortOrder=request.POST.get(str(i.optionId)+"customSortOrder")
-                        if request.POST.get(str(i.optionId)+"customIsDefault")=="on":
-                            updateCustomOption.isDefault=True
+                    getInputType=AttributeFields.objects.filter(code=request.POST.get("code"))
+                    for i in getInputType:
+                        if i.inputType=="boolean" or i.inputType=="textbox" or i.inputType=="textarea":
+                            options.objects.filter(fieldId=obj_id).delete()
                         else:
-                            updateCustomOption.isDefault=False
-                        updateCustomOption.fieldId=attribute
-                        updateCustomOption.save()
-                        for langs in languageList:
-                            updateOptionLabels=OptionTranslate(optionTranslateId=request.POST.get(str(i.optionId)+langs.locale+"OptionLabelid"))
-                            getOptionLabel=request.POST.get(str(i.optionId)+"-"+langs.locale)
-                            
-                            updateOptionLabels.optionsLabel=getOptionLabel
-                            updateOptionLabels.languageId=langs
-                            updateOptionLabels.optionId=i
-                            updateOptionLabels.save()
-                    no_custom=0
-                    for form in formset:
-                        
-                        if len(form["customOption"].data)==0:
-                            no_custom=1
-                            
-                        else:
-                            data2=form.save(commit=False)
-                            
-                            data2.fieldId=attribute
-                            data2.save()
-                    if request.POST.get("options-TOTAL_FORMS")!=None:
-                        for i in range(0,int(request.POST.get("options-TOTAL_FORMS"))):
-                            for langs in languageList:
-                                getLable=request.POST.get(langs.locale+"options-"+str(i)+"-optionsLabel")
-                                
-                                if no_custom!=1:
+                            for i in optionsData:
+                                updateCustomOption=options.objects.get(optionId=i.optionId)
+                                updateCustomOption.customOption=request.POST.get(str(i.optionId)+"customOption")
+                                updateCustomOption.sortOrder=request.POST.get(str(i.optionId)+"customSortOrder")
+                                if request.POST.get(str(i.optionId)+"customIsDefault")=="on":
+                                    updateCustomOption.isDefault=True
+                                else:
+                                    updateCustomOption.isDefault=False
+                                updateCustomOption.fieldId=attribute
+                                updateCustomOption.save()
+                                for langs in languageList:
+                                    updateOptionLabels=OptionTranslate(optionTranslateId=request.POST.get(str(i.optionId)+langs.locale+"OptionLabelid"))
+                                    getOptionLabel=request.POST.get(str(i.optionId)+"-"+langs.locale)
+                                    updateOptionLabels.optionsLabel=getOptionLabel
+                                    updateOptionLabels.languageId=langs
+                                    updateOptionLabels.optionId=i
+                                    updateOptionLabels.save()
+                            no_custom=0
+                            for form in formset:
+                                if len(form["customOption"].data)==0:
+                                    no_custom=1
+                                else:
+                                    data2=form.save(commit=False)
+                                    data2.fieldId=attribute
+                                    data2.save()
+                            if request.POST.get("options-TOTAL_FORMS")!=None:
+                                for i in range(0,int(request.POST.get("options-TOTAL_FORMS"))):
+                                    for langs in languageList:
+                                        getLable=request.POST.get(langs.locale+"options-"+str(i)+"-optionsLabel")
+                                        
+                                        if no_custom!=1:
 
-                                    saveOptionTranslate=OptionTranslate()
-                                    saveOptionTranslate.optionsLabel=getLable
-                                    saveOptionTranslate.languageId=langs
-                                    optionId=options.objects.get(customOption=request.POST.get("options-"+str(i)+"-customOption"))
-                                    saveOptionTranslate.optionId=optionId
-                                    saveOptionTranslate.save()
+                                            saveOptionTranslate=OptionTranslate()
+                                            saveOptionTranslate.optionsLabel=getLable
+                                            saveOptionTranslate.languageId=langs
+                                            optionId=options.objects.get(customOption=request.POST.get("options-"+str(i)+"-customOption"))
+                                            saveOptionTranslate.optionId=optionId
+                                            saveOptionTranslate.save()
                     
                 else:
                     AttributesFieldsForm(request.POST).save()
