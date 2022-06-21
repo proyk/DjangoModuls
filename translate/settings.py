@@ -40,8 +40,7 @@ INSTALLED_APPS = [
     'languages',
     'pages',
     'translationPage',
-    'CustomAttributes',
-    
+    'themeCustom',
     'tinymce',
 ]
 
@@ -60,7 +59,7 @@ import os
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [os.path.join(BASE_DIR, 'templates')],
+        'DIRS': [os.path.join(BASE_DIR, 'themeCustom/templates/')],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -69,6 +68,7 @@ TEMPLATES = [
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
             ],
+         
         },
     },
 ]
@@ -144,7 +144,7 @@ USE_TZ = True
 
 STATIC_ROOT = 'staticfiles'
 STATIC_URL = '/static/'
-STATIC_ROOT = os.path.join(BASE_DIR,'staticfiles')
+
 
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR,'static'),

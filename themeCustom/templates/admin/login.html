@@ -1,0 +1,91 @@
+
+{% load static %}
+
+{% block extrastyle %}
+<!-- Google Font: Source Sans Pro -->
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
+<!-- Font Awesome -->
+<link rel="stylesheet" href="{% static 'admin/plugins/fontawesome-free/css/all.min.css' %}">
+<!-- icheck bootstrap -->
+<link rel="stylesheet" href="{% static 'admin/plugins/icheck-bootstrap/icheck-bootstrap.min.css' %}">
+<!-- Theme style -->
+<link rel="stylesheet" href="{% static 'admin/css/adminlte.css' %}">
+
+
+{{ form.media }}
+{% endblock %}
+
+
+  
+
+{% block content %}
+<head>
+    <title>Login</title>
+</head>
+
+<body class="hold-transition login-page">
+    
+      
+
+    
+    <div class="login-box">
+        <div class="login-logo">
+            {%block branding %}
+            <a href="../../index2.html"><b>Admin</b>LTE</a>
+            {% endblock %}
+          </div>
+      
+      <!-- /.login-logo -->
+      <div class="card">
+        <div class="card-body login-card-body">
+          <p class="login-box-msg">Sign in to start your session</p>
+    
+          <form action="{{ app_path }}" method="post" id="login-form">
+            {% csrf_token %}
+            <div class="input-group mb-3">
+                <input type="text" class="form-control" name="username" autofocus="" autocapitalize="none" autocomplete="username" maxlength="150" required="" id="id_username">
+          <div class="input-group-append">
+                  <div class="input-group-text">
+                    <span class="fas fa-user"></span>
+                  </div>
+                </div>
+              </div>
+              <div class="input-group mb-3">
+                <input type="password" class="form-control" name="password" autocomplete="current-password" required="" id="id_password">
+                <div class="input-group-append">
+                  <div class="input-group-text">
+                    <span class="fas fa-lock"></span>
+                  </div>
+                </div>
+              </div>
+              
+                
+                <!-- /.col -->
+                <div class="text-center mb-3">
+                    <button type="submit" class="btn btn-block btn-primary">Sign In</button>
+                </div>
+                <!-- /.col -->
+              
+            
+        </form>
+    
+          
+        </div>
+        <!-- /.login-card-body -->
+      </div>
+    </div>
+    
+    <!-- /.login-box -->
+
+    <!-- jQuery -->
+    <script src="{% static 'admin/plugins/jquery/jquery.min.js' %}"></script>
+  <!-- Bootstrap 4 -->
+  <script src="{% static 'admin/plugins/bootstrap/js/bootstrap.bundle.min.js' %}"></script>
+  <!-- AdminLTE App -->
+  <script src="{% static 'admin/js/adminlte.min.js' %}"></script>
+    
+</body>
+    
+
+    {% endblock %}
+

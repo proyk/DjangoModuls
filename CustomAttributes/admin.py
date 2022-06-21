@@ -15,6 +15,12 @@ from django.http import HttpResponseRedirect
 
 # Register your models here.
 class AttributeFieldsAdmin(admin.ModelAdmin):
+    def changelist_view(self, request, extra_context=None):
+        fieldsData=AttributeFields.objects.all()
+        fieldsLabelData=AttributeTranslate.objects.all()
+        customAttributesData=options.objects.all().order_by("sortOrder")
+        customAttributesLabelsData=options.objects.raw("select * from customattributes_options as co join customattributes_optiontranslate as cot on co.optionId=cot.optionId_id")
+        return super().changelist_view(request, {"fieldsData":fieldsData,"labelData":fieldsLabelData,'customAttributesData':customAttributesData,'customAttributesLabelsData':customAttributesLabelsData})
     def changeform_view(self, request, obj_id, form_url, extra_context=None):
         global attributeFields
         global errorLabel
@@ -140,7 +146,7 @@ class AttributeFieldsAdmin(admin.ModelAdmin):
 
                 
                     
-                        
+            
             except IntegrityError as e:
                 messages.error(request,'"'+errorLabel+'" Contains Duplicate Values !!!')
                 options.objects.get(customOption=errorLabel).delete()
@@ -179,6 +185,3 @@ class AttributeTranslateAdmin(admin.ModelAdmin):
     list_per_page =5
     list_display = ['fieldLabel','languageId']
 admin.site.register(AttributeFields,AttributeFieldsAdmin)
-admin.site.register(AttributeTranslate,AttributeTranslateAdmin)
-admin.site.register(options)
-admin.site.register(OptionTranslate)

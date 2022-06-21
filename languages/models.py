@@ -13,7 +13,8 @@ class language(models.Model):
         ('disabled','Disabled'),
     )
     status = models.CharField(max_length=10,choices=statusChoice,default='enabled')
-
+    created_at = models.DateTimeField(auto_now_add=True,null=True)
+    updated_at = models.DateTimeField(auto_now=True,null=True)
     def __str__(self):
         return str(self.title)
     def save(self, *args, **kwargs):

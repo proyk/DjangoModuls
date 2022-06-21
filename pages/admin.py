@@ -1,7 +1,8 @@
 from asyncio.windows_events import NULL
 from turtle import title, update
 from django.contrib import admin
-
+from django.contrib import messages
+from django.http import HttpResponseRedirect
 from pages.models import page
 from languages.models import language
 from translationPage.models import content
@@ -15,7 +16,7 @@ class ContentInline(admin.StackedInline):
 
 
 class PageAdmin(admin.ModelAdmin):
-    
+    list_display = ['slug','created_at','updated_at']
     
     def changeform_view(self, request, obj_id, form_url, extra_context=None):
         global pages
@@ -36,6 +37,9 @@ class PageAdmin(admin.ModelAdmin):
                     updateContent.title=titleData
                     updateContent.content=contentData
                     updateContent.save()
+                pageForm.save()
+                messages.success(request,"Data Updated successfully !!!!!")
+                return HttpResponseRedirect('/admin/pages/page/')
             else:
                 slugData=request.POST.get("slug")
                 
@@ -56,8 +60,13 @@ class PageAdmin(admin.ModelAdmin):
                         saveContent.title=titleData
                         saveContent.content=contentData
                         saveContent.save()
+                        messages.success(request,lang.title+" Data Inserted successfully !!!!!")
+                    
+
                     else:
-                        print(lang.title+" Not Inserted..........!")
+                        messages.error(request,lang.title+" Not Inserted..........!")
+                return HttpResponseRedirect('/admin/pages/page/')
+
             
         label="add"
         if obj_id==None:

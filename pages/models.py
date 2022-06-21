@@ -10,7 +10,8 @@ class page(models.Model):
     )
     status = models.CharField(max_length=10,choices=statusChoice,default='enabled')
     sortOrder = models.IntegerField(default=0)
-    
+    created_at = models.DateTimeField(auto_now_add=True,null=True)
+    updated_at = models.DateTimeField(auto_now=True,null=True)
 
     def __str__(self):
         return str(self.slug)   

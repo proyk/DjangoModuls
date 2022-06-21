@@ -9,7 +9,8 @@ class content(models.Model):
     contentId = models.AutoField(primary_key=True)
     title = models.CharField(max_length=100,null=False)
     content = tinymce_models.HTMLField(null=False)
-
+    created_at = models.DateTimeField(auto_now_add=True,null=True)
+    updated_at = models.DateTimeField(auto_now=True,null=True)
     
     def __str__(self):
         return str(self.title)   

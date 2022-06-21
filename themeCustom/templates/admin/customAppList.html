@@ -1,0 +1,24 @@
+{% load i18n %}
+{% if app_list %}
+{% for app in app_list %}
+          <li class="nav-item">
+            <a href="#" class="nav-link">
+              <i class="nav-icon fas fa-list-alt"></i>
+              <p>
+                {{ app.name }}
+                <i class="right fas fa-angle-left"></i>
+              </p>
+            </a>
+            <ul class="nav nav-treeview">
+                {% for model in app.models %}
+                <li class="nav-item">
+                  <a href="{{ model.admin_url }}" class="nav-link ">
+                    <i class="far fa-circle nav-icon"></i>
+                    <p>{{ model.name }}</p>
+                  </a>
+                </li>
+                {% endfor %}
+                </ul>
+          </li>
+          {% endfor %}
+          {% endif %}

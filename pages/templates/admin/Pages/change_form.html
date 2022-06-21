@@ -1,12 +1,8 @@
 {% extends "admin/change_form.html" %}
 {% load static %}
+{% load test %}
 
-{% block extrahead %}
-{{ block.super }}
-{% endblock %}
-
-{% block content %}
-
+{% block extrastyle %}{{ block.super }}
 <link rel="stylesheet" href="https://code.jquery.com/ui/1.13.1/themes/base/jquery-ui.css">
 
 <script src="https://code.jquery.com/jquery-3.6.0.js"></script>
@@ -18,8 +14,11 @@ $( function() {
 } );
 
 </script>
-</head>
-<body>
+
+{% endblock %}
+{% block content %}
+<body class="hold-transition sidebar-mini layout-fixed ml-4">
+    <div class="content-wrapper">
     <form action=""  method="post">
         {% csrf_token %}
     <div>
@@ -41,7 +40,7 @@ $( function() {
                 </ul>
                     {% if label == "add" %}
                     {% for lang in languages%}
-                        <div id="{{lang}}">
+                        <div class="page-table" id="{{lang}}">
                             <table style="width: 100%;">
                                 <tr>
                                     <td>Language :</td>
@@ -49,11 +48,11 @@ $( function() {
                                 </tr>
                                 <tr>
                                     <td>Title :</td>
-                                    <td><input type="text" name="{{lang}}title" maxlength="100"  id="id_title"></td>
+                                    <td><input type="text" name="{{lang}}title" class="form-control-sm" maxlength="100"  id="id_title"></td>
                                 </tr>
                                 <tr>
                                     <td>Content :</td>
-                                    <td><textarea class="tinymce" cols="40" data-mce-conf="{&quot;plugins&quot;: &quot;\n            textcolor save link image media preview codesample contextmenu\n            table code lists fullscreen  insertdatetime  nonbreaking\n            contextmenu directionality searchreplace wordcount visualblocks\n            visualchars code fullscreen autolink lists  charmap print  hr\n            anchor pagebreak\n            &quot;, &quot;toolbar1&quot;: &quot;| codesample | code |\n            fullscreen preview bold italic underline | fontselect,\n            fontsizeselect | alignleft alignright \n            aligncenter alignjustify | indent outdent \n            &quot;, &quot;menubar&quot;: true, &quot;statusbar&quot;: true, &quot;height&quot;: 800, &quot;spellchecker_languages&quot;: &quot;Afrikaans=af,Arabic / Algerian Arabic=ar,Asturian=as,Azerbaijani=az,Bulgarian=bg,Belarusian=be,Bengali=bn,Breton=br,Bosnian=bs,Catalan=ca,Czech=cs,Welsh=cy,Danish=da,German=de,Lower Sorbian=ds,Greek=el,+English / Australian English / British English=en,Esperanto=eo,Spanish / Argentinian Spanish / Colombian Spanish / Mexican Spanish / Nicaraguan Spanish / Venezuelan Spanish=es,Estonian=et,Basque=eu,Persian=fa,Finnish=fi,French=fr,Frisian=fy,Irish=ga,Scottish Gaelic=gd,Galician=gl,Hebrew=he,Hindi=hi,Croatian=hr,Upper Sorbian=hs,Hungarian=hu,Armenian=hy,Interlingua=ia,Indonesian=id,Igbo=ig,Ido=io,Icelandic=is,Italian=it,Japanese=ja,Georgian / Kabyle=ka,Kazakh=kk,Khmer=km,Kannada=kn,Korean=ko,Kyrgyz=ky,Luxembourgish=lb,Lithuanian=lt,Latvian=lv,Macedonian=mk,Malayalam=ml,Mongolian=mn,Marathi=mr,Malay=ms,Burmese=my,Norwegian Bokm\u00e5l=nb,Nepali=ne,Dutch=nl,Norwegian Nynorsk=nn,Ossetic=os,Punjabi=pa,Polish=pl,Portuguese / Brazilian Portuguese=pt,Romanian=ro,Russian=ru,Slovak=sk,Slovenian=sl,Albanian=sq,Serbian / Serbian Latin=sr,Swedish=sv,Swahili=sw,Tamil=ta,Telugu=te,Tajik=tg,Thai=th,Turkmen=tk,Turkish=tr,Tatar=tt,Udmurt=ud,Ukrainian=uk,Urdu=ur,Uzbek=uz,Vietnamese=vi,Simplified Chinese / Traditional Chinese=zh&quot;, &quot;directionality&quot;: &quot;ltr&quot;, &quot;mode&quot;: &quot;exact&quot;, &quot;strict_loading_mode&quot;: 1, &quot;elements&quot;: &quot;id_content&quot;}" id="id_content" name="{{lang}}content" rows="10"></textarea></td>
+                                    <td><textarea class="tinymce" class="form-control-sm" cols="40" data-mce-conf="{&quot;plugins&quot;: &quot;\n            textcolor save link image media preview codesample contextmenu\n            table code lists fullscreen  insertdatetime  nonbreaking\n            contextmenu directionality searchreplace wordcount visualblocks\n            visualchars code fullscreen autolink lists  charmap print  hr\n            anchor pagebreak\n            &quot;, &quot;toolbar1&quot;: &quot;| codesample | code |\n            fullscreen preview bold italic underline | fontselect,\n            fontsizeselect | alignleft alignright \n            aligncenter alignjustify | indent outdent \n            &quot;, &quot;menubar&quot;: true, &quot;statusbar&quot;: true, &quot;height&quot;: 800, &quot;spellchecker_languages&quot;: &quot;Afrikaans=af,Arabic / Algerian Arabic=ar,Asturian=as,Azerbaijani=az,Bulgarian=bg,Belarusian=be,Bengali=bn,Breton=br,Bosnian=bs,Catalan=ca,Czech=cs,Welsh=cy,Danish=da,German=de,Lower Sorbian=ds,Greek=el,+English / Australian English / British English=en,Esperanto=eo,Spanish / Argentinian Spanish / Colombian Spanish / Mexican Spanish / Nicaraguan Spanish / Venezuelan Spanish=es,Estonian=et,Basque=eu,Persian=fa,Finnish=fi,French=fr,Frisian=fy,Irish=ga,Scottish Gaelic=gd,Galician=gl,Hebrew=he,Hindi=hi,Croatian=hr,Upper Sorbian=hs,Hungarian=hu,Armenian=hy,Interlingua=ia,Indonesian=id,Igbo=ig,Ido=io,Icelandic=is,Italian=it,Japanese=ja,Georgian / Kabyle=ka,Kazakh=kk,Khmer=km,Kannada=kn,Korean=ko,Kyrgyz=ky,Luxembourgish=lb,Lithuanian=lt,Latvian=lv,Macedonian=mk,Malayalam=ml,Mongolian=mn,Marathi=mr,Malay=ms,Burmese=my,Norwegian Bokm\u00e5l=nb,Nepali=ne,Dutch=nl,Norwegian Nynorsk=nn,Ossetic=os,Punjabi=pa,Polish=pl,Portuguese / Brazilian Portuguese=pt,Romanian=ro,Russian=ru,Slovak=sk,Slovenian=sl,Albanian=sq,Serbian / Serbian Latin=sr,Swedish=sv,Swahili=sw,Tamil=ta,Telugu=te,Tajik=tg,Thai=th,Turkmen=tk,Turkish=tr,Tatar=tt,Udmurt=ud,Ukrainian=uk,Urdu=ur,Uzbek=uz,Vietnamese=vi,Simplified Chinese / Traditional Chinese=zh&quot;, &quot;directionality&quot;: &quot;ltr&quot;, &quot;mode&quot;: &quot;exact&quot;, &quot;strict_loading_mode&quot;: 1, &quot;elements&quot;: &quot;id_content&quot;}" id="id_content" name="{{lang}}content" rows="10"></textarea></td>
                                 </tr>
                             </table>
                         </div>
@@ -72,11 +71,11 @@ $( function() {
                                             </tr>
                                             <tr>
                                                 <td>Title :</td>
-                                                <td><input type="text" name="{{lang}}title" maxlength="100" value="{{data.title}}"  id="id_title"></td>
+                                                <td><input type="text" class="form-control-sm" name="{{lang}}title" maxlength="100" value="{{data.title}}"  id="id_title"></td>
                                             </tr>
                                             <tr>
                                                 <td>Content :</td>
-                                                <td><textarea class="tinymce" cols="40" data-mce-conf="{&quot;plugins&quot;: &quot;\n            textcolor save link image media preview codesample contextmenu\n            table code lists fullscreen  insertdatetime  nonbreaking\n            contextmenu directionality searchreplace wordcount visualblocks\n            visualchars code fullscreen autolink lists  charmap print  hr\n            anchor pagebreak\n            &quot;, &quot;toolbar1&quot;: &quot;| codesample | code |\n            fullscreen preview bold italic underline | fontselect,\n            fontsizeselect | alignleft alignright \n            aligncenter alignjustify | indent outdent \n            &quot;, &quot;menubar&quot;: true, &quot;statusbar&quot;: true, &quot;height&quot;: 800, &quot;spellchecker_languages&quot;: &quot;Afrikaans=af,Arabic / Algerian Arabic=ar,Asturian=as,Azerbaijani=az,Bulgarian=bg,Belarusian=be,Bengali=bn,Breton=br,Bosnian=bs,Catalan=ca,Czech=cs,Welsh=cy,Danish=da,German=de,Lower Sorbian=ds,Greek=el,+English / Australian English / British English=en,Esperanto=eo,Spanish / Argentinian Spanish / Colombian Spanish / Mexican Spanish / Nicaraguan Spanish / Venezuelan Spanish=es,Estonian=et,Basque=eu,Persian=fa,Finnish=fi,French=fr,Frisian=fy,Irish=ga,Scottish Gaelic=gd,Galician=gl,Hebrew=he,Hindi=hi,Croatian=hr,Upper Sorbian=hs,Hungarian=hu,Armenian=hy,Interlingua=ia,Indonesian=id,Igbo=ig,Ido=io,Icelandic=is,Italian=it,Japanese=ja,Georgian / Kabyle=ka,Kazakh=kk,Khmer=km,Kannada=kn,Korean=ko,Kyrgyz=ky,Luxembourgish=lb,Lithuanian=lt,Latvian=lv,Macedonian=mk,Malayalam=ml,Mongolian=mn,Marathi=mr,Malay=ms,Burmese=my,Norwegian Bokm\u00e5l=nb,Nepali=ne,Dutch=nl,Norwegian Nynorsk=nn,Ossetic=os,Punjabi=pa,Polish=pl,Portuguese / Brazilian Portuguese=pt,Romanian=ro,Russian=ru,Slovak=sk,Slovenian=sl,Albanian=sq,Serbian / Serbian Latin=sr,Swedish=sv,Swahili=sw,Tamil=ta,Telugu=te,Tajik=tg,Thai=th,Turkmen=tk,Turkish=tr,Tatar=tt,Udmurt=ud,Ukrainian=uk,Urdu=ur,Uzbek=uz,Vietnamese=vi,Simplified Chinese / Traditional Chinese=zh&quot;, &quot;directionality&quot;: &quot;ltr&quot;, &quot;mode&quot;: &quot;exact&quot;, &quot;strict_loading_mode&quot;: 1, &quot;elements&quot;: &quot;id_content&quot;}" id="id_content"  name="{{lang}}content" rows="10">{{data.content}}</textarea></td>
+                                                <td><textarea class="tinymce" class="form-control-sm" cols="40" data-mce-conf="{&quot;plugins&quot;: &quot;\n            textcolor save link image media preview codesample contextmenu\n            table code lists fullscreen  insertdatetime  nonbreaking\n            contextmenu directionality searchreplace wordcount visualblocks\n            visualchars code fullscreen autolink lists  charmap print  hr\n            anchor pagebreak\n            &quot;, &quot;toolbar1&quot;: &quot;| codesample | code |\n            fullscreen preview bold italic underline | fontselect,\n            fontsizeselect | alignleft alignright \n            aligncenter alignjustify | indent outdent \n            &quot;, &quot;menubar&quot;: true, &quot;statusbar&quot;: true, &quot;height&quot;: 800, &quot;spellchecker_languages&quot;: &quot;Afrikaans=af,Arabic / Algerian Arabic=ar,Asturian=as,Azerbaijani=az,Bulgarian=bg,Belarusian=be,Bengali=bn,Breton=br,Bosnian=bs,Catalan=ca,Czech=cs,Welsh=cy,Danish=da,German=de,Lower Sorbian=ds,Greek=el,+English / Australian English / British English=en,Esperanto=eo,Spanish / Argentinian Spanish / Colombian Spanish / Mexican Spanish / Nicaraguan Spanish / Venezuelan Spanish=es,Estonian=et,Basque=eu,Persian=fa,Finnish=fi,French=fr,Frisian=fy,Irish=ga,Scottish Gaelic=gd,Galician=gl,Hebrew=he,Hindi=hi,Croatian=hr,Upper Sorbian=hs,Hungarian=hu,Armenian=hy,Interlingua=ia,Indonesian=id,Igbo=ig,Ido=io,Icelandic=is,Italian=it,Japanese=ja,Georgian / Kabyle=ka,Kazakh=kk,Khmer=km,Kannada=kn,Korean=ko,Kyrgyz=ky,Luxembourgish=lb,Lithuanian=lt,Latvian=lv,Macedonian=mk,Malayalam=ml,Mongolian=mn,Marathi=mr,Malay=ms,Burmese=my,Norwegian Bokm\u00e5l=nb,Nepali=ne,Dutch=nl,Norwegian Nynorsk=nn,Ossetic=os,Punjabi=pa,Polish=pl,Portuguese / Brazilian Portuguese=pt,Romanian=ro,Russian=ru,Slovak=sk,Slovenian=sl,Albanian=sq,Serbian / Serbian Latin=sr,Swedish=sv,Swahili=sw,Tamil=ta,Telugu=te,Tajik=tg,Thai=th,Turkmen=tk,Turkish=tr,Tatar=tt,Udmurt=ud,Ukrainian=uk,Urdu=ur,Uzbek=uz,Vietnamese=vi,Simplified Chinese / Traditional Chinese=zh&quot;, &quot;directionality&quot;: &quot;ltr&quot;, &quot;mode&quot;: &quot;exact&quot;, &quot;strict_loading_mode&quot;: 1, &quot;elements&quot;: &quot;id_content&quot;}" id="id_content"  name="{{lang}}content" rows="10">{{data.content}}</textarea></td>
                                             </tr>
                                         </table>
                                     </div>
@@ -94,18 +93,19 @@ $( function() {
           <div id="tab-1">
             <div>
                 
-                <table style="width: 100%;">
+                <table class="page-table" style="width: 100%;">
                     <tr>
                         <td>Slug :</td>
-                        <td>{{pageForm.slug}}</td>
+                        <td>{{pageForm.slug | add_class:"form-control-sm "}}</td>
                     </tr>
+                    
                     <tr>
                         <td>Status :</td>
-                        <td>{{pageForm.status}}</td>
+                        <td>{{pageForm.status | add_class:"form-control-sm "}}</td>
                     </tr>
                     <tr>
                         <td>Sort Order :</td>
-                        <td>{{pageForm.sortOrder}}</td>
+                        <td>{{pageForm.sortOrder | add_class:"form-control-sm "}}</td>
                     </tr>
                     
                 </table>
@@ -128,6 +128,8 @@ $( function() {
     {% endif %}
 </div>
 </form>
+</div>
+</body>
 <br>
 <br>
 <br>

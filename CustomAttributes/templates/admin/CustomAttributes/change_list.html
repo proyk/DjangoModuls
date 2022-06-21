@@ -1,0 +1,67 @@
+{% extends "admin/change_list.html" %}
+{% load static %}
+
+{% block extrahead %}
+{{ block.super }}
+{% endblock %}
+
+{% block content %}
+<body class="hold-transition sidebar-mini layout-fixed ml-4">
+    <div class="content-wrapper">
+  <div id="content-main">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<table id="example2" class="table table-bordered table-hover">
+    <tr>
+        <th>
+            Field
+        </th>
+        <th>
+            Field Labels
+        </th>
+        <th>
+            Custom Attributes
+        </th>
+        <th>
+            Custom Attributes Labels
+        </th>
+        <th>
+            Actions
+        </th>
+    </tr>
+    {% for field in fieldsData %}
+    <tr>
+        <td>{{field}}</td>
+        <td >
+        {% for label in labelData %}
+        {% if label.fieldId == field %}
+        
+        {{label}} [{{label.languageId}}]<br>
+        
+        {% endif %}
+        {% endfor %}
+    </td>
+        <td >
+            {% for customAttribute in customAttributesData %}
+            {% if customAttribute.fieldId == field %}
+            {{customAttribute}} - {{customAttribute.sortOrder}} - {{customAttribute.isDefault}} <br>
+            {% endif %}
+            {% endfor %}
+        </td>
+        <td>
+            {% for attributeTranslate in customAttributesLabelsData %}
+            {% if attributeTranslate.fieldId == field %}
+            {{attributeTranslate.optionsLabel}} [{{attributeTranslate.languageId_id}}] <br>
+            {% endif %}
+            {% endfor %}
+        </td>
+        <td>
+            <a href="{{field.attributeId}}/delete/"><i class="fa fa-trash" style="font-size:25px;color:red;"></i></a> 
+                <a href="{{field.attributeId}}/change/"><i class="fa fa-edit" style="font-size:25px; margin-left: 20px;"></i></a>
+        </td>
+    </tr>
+    {% endfor %}
+</table>
+</div>
+</div>
+</body>
+{% endblock %}

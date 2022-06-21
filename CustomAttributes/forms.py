@@ -1,8 +1,8 @@
 from django import forms
 
-from .models import AttributeTranslate 
-from .models import AttributeFields
-from .models import options,OptionTranslate
+from ..attribute.models import AttributeTranslate 
+from ..attribute.models import AttributeFields
+from ..attribute.models import options,OptionTranslate
 from django.forms import formset_factory
 class AttributeTranslateForm(forms.ModelForm):
     
