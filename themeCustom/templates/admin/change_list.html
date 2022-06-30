@@ -55,15 +55,11 @@
         <div class="row">
           <div class="col-12">
             <div class="card">
-              <div class="card-header text-upper bg-primary">
-                <h3 class="card-title ">{{opts.model_name}}</h3>
-                {% block object-tools %}
-                      <ul class="object-tools text-right" style="list-style: none;">
-                        {% block object-tools-items %}
-                          <button class="btn btn-light">{% change_list_object_tools %}</button>
-                        {% endblock %}
-                      </ul>
-                  {% endblock %}
+              <div class="card-header  bg-primary">
+                <h3 class="card-title" style="text-transform: uppercase;">{{opts.model_name}}</h3>
+                
+                <a href="add" style="float: right;" ><i class="ml-2 fas fa-plus fa-dark"></i></a>
+                
               </div>
               <!-- /.card-header -->
               <div class="card-body results">

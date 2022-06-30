@@ -15,10 +15,20 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path,include,re_path
-
+from django.conf import settings
+from django.conf.urls.static import static
+from django.contrib.staticfiles.urls import staticfiles_urlpatterns
+from customers import views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path('delete/',views.delete,name='delete'),
+    path('edit/',views.edit,name='edit'),
+    path('verifyEmail',views.verifyEmail,name='verifyEmail'),
     path('',include("pages.urls")),
- 
+    
 ]
+if settings.DEBUG:
+    urlpatterns += static(settings.MEDIA_URL,document_root = settings.MEDIA_ROOT)
+
+urlpatterns += staticfiles_urlpatterns()

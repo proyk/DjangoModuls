@@ -1,0 +1,342 @@
+{% extends "admin/change_form.html" %}
+{% load static %}
+{% load test %}
+{% block extrastyle %}
+{{ block.super }}
+<link rel="stylesheet" href="https://code.jquery.com/ui/1.13.1/themes/base/jquery-ui.css">
+<style>
+    .error{
+        color:red;
+    }
+</style>
+<script src="https://code.jquery.com/jquery-3.6.0.js"></script>
+<script src="https://code.jquery.com/ui/1.13.1/jquery-ui.js"></script>
+
+<script>
+$( function() {
+  $( "#tabs" ).tabs();
+  $(".tabs").tabs();
+} );
+
+</script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.0/jquery.validate.min.js"> </script>  
+<script>  
+    $(document).ready (function () {  
+        $('#customerForm').validate({
+            rules:{
+                firstName:"required",
+                lastName:"required",
+                contactNo:"required",
+                email:"required",
+                profileImage:"required",
+                password:"required",
+                addressName:"required",
+            },
+            messages:{
+                firstName:"Please Enter First Name",
+                lastName:"Please Enter Last Name",
+                contactNo:"Please Enter Contact Number",
+                email:"Please Enter Email",
+                profileImage:"Please Select Image For Profile",
+                password:"Please Enter Password",
+                addressName:"Please Enter Address Name"
+            },
+        
+        });
+    });
+</script>
+<script src=
+"https://cdnjs.cloudflare.com/ajax/libs/sweetalert/2.1.0/sweetalert.min.js">
+        </script>
+{% endblock %}
+{% block extrahead %}
+{{ block.super }}
+{% endblock %}
+
+{% block content %}
+<body class="hold-transition sidebar-mini layout-fixed ml-4">
+    <div class="content-wrapper">
+        <form method="post" id="customerForm" action="" enctype="multipart/form-data">
+            {% csrf_token %}
+        <div>
+            <div  class="tabs">
+              <ul>
+                <li><a href="#tab-1" class="selected">Customer Information</a></li>
+                <li class="address-link"><a href="#tab-2" class="">Address</a></li>
+                <div class="text-right">
+                {% if lbl == "add" %}
+              <input type="submit" value="Save" class="btn  btn-primary text-right">  
+              {% else %}
+              <input id="actionBtn" type="submit" name="updateContent" value="Update" class="btn  btn-primary text-right"> 
+              
+           
+              {% endif %}
+            </div>
+              </ul>
+              <div id="tab-2">
+                <div>
+                                                  
+                   <table style="width: 100%;" cellpadding="10px">
+                        <tr>
+                            <th>
+                                <input type="hidden" id="updateId" name="updateId"/>
+                                <label>Address Name:</label>
+                            </th>
+                            <th>
+                                <label>Building:</label>
+                            </th>
+                            
+                            
+                        </tr>
+                        <tr>
+                            <td>
+                                {{addForm.addressName|add_class:"form-control customError "}}
+                            </td>
+                            <td>
+                                {{addForm.building|add_class:"form-control"}}
+                            </td>
+                            
+                            
+                        </tr>
+                        <tr>
+                            <th>
+                                <label>Street:</label>
+                            </th>
+                            <th>
+                                <label>Postal Code:</label>
+                            </th>
+                            
+                        </tr>
+                        <tr>
+                            <td>
+                                {{addForm.street|add_class:"form-control"}}
+                            </td>
+                            <td>
+                                {{addForm.postalCode|add_class:"form-control"}}
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>
+                                <label>Landmark:</label>
+                            </th>
+                            <th>
+                                <label>Is default:</label>
+                            </th>
+                            
+                        </tr>
+                        <tr>
+                            <td>
+                                {{addForm.landMark|add_class:"form-control"}}
+                            </td>
+                            <td>
+                                {{addForm.isDefault}}
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>
+                                <label>State:</label>
+                            </th>
+                            <th>
+                                <label>City:</label>
+                            </th>
+                            
+                        </tr>
+                        <tr>
+                            <td>
+                                {{addForm.state|add_class:"form-control"}}
+                            </td>
+                            <td>
+                                {{addForm.city|add_class:"form-control"}}
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+                <hr>
+                <div  class="row">
+                    {% for data in addressData %}
+                    <div class="col-md-6">
+                        <div class="callout callout-info">
+                            <h5 class="text-uppercase">{{data.addressName}} {% if data.isDefault %} <i class="fas fa-check mr-2" style="color:green;font-size: 25px;"></i>{%endif%}</h5>
+                            <ul style="list-style: none;">
+                                <input type="hidden" id="{{data.customerAddressId}}">
+                                <li><i class="fas fa-building mr-2"></i>Building : {{data.building}}</li>
+                                <li><i class="fas fa-road mr-2"></i>Street : {{data.street}}</li>
+                                <li><i class="fas fa-envelope-open mr-2"></i>Postal Code : {{data.postalCode}}</li>
+                                <li><i class="fas fa-landmark mr-2"></i>Landmark : {{data.landMark}}</li>
+                                <li><i class="fas fa-industry mr-2"></i>State : {{data.state}}</li>
+                                <li><i class="fas fa-city mr-2"></i>City : {{data.city}}</li>
+                                <div class="text-center">
+                                    <a class="del-address" ><i class="fas fa-trash mr-2" style="color:red;font-size: 20px;"></i></a>
+                                    <a class="change-address" ><i class="fas fa-edit mr-2" style="color:blue;font-size: 20px;"></i></a>
+                                </div>
+                            </ul>
+                            
+                        </div>
+                          
+                </div>
+                {% endfor %}
+                </div>
+              </div>
+              <div id="tab-1">
+                <div>
+                   
+                    <table  style="width: 100%;" cellpadding="10px">
+                   <tr>
+                    <th>
+                        <label>First Name*</label>
+                        </th>
+                        <th>
+                            <label>Last Name*</label>
+                            </th>
+                    
+                   </tr>
+                   <tr>
+                    <td>{{customerForm.firstName|add_class:"form-control "}}</td>
+                    <td>{{customerForm.lastName|add_class:"form-control"}}</td>
+                   </tr>
+                   <tr>
+                    <th>
+                        <label>Contact No*</label>
+                        </th>
+                        <th>
+                            <label>Email*</label>
+                            </th>
+                    
+                   </tr>
+                   <tr>
+                    <td>{{customerForm.contactNo|add_class:"form-control"}}</td>
+                    <td>{{customerForm.email|add_class:"form-control"}}</td>
+                   </tr>
+                   <tr>
+                    <th>
+                        <label>Profile Image*</label>
+                        </th>
+                    <td>{{customerForm.profileImage|add_class:"form-control"}}</td>
+                   </tr>
+                   <tr>
+                    <th>
+                        <label>Password*</label>
+                        </th>
+                        <th>
+                            <label>Customer Group*</label>
+                            </th>
+                    
+                   </tr>
+                   <tr>
+                    <td>{{customerForm.password|add_class:"form-control"}}</td>
+                    <td>{{customerForm.customerGroup|add_class:"form-control"}}</td>
+                   </tr>
+                   
+                   <tr>
+                    <th>
+                        <label>Send Email For Verification </label>
+                        </th>
+                    <td>
+                        <input type="checkbox" name="emailVerified">
+                    </td>
+                   </tr>
+
+                </table>
+                </div>
+              </div>
+              
+            </div>
+            
+          </div>
+        </form>
+</div>
+
+<script>
+    $('.del-address').click(function (e) {
+    e.preventDefault();
+    
+    
+    
+    var address_id = $(this).parent("div").parent("ul").children("input").attr("id");
+    console.log(address_id);
+    swal({
+        title: "Delete!!",
+        text: "Are you sure to delete this record?",
+        icon: "warning", 
+        buttons:["No","Yes"],
+    }).then((willDelete) => {
+        if (willDelete) 
+    {   
+        
+      $.ajax({
+            url: "/delete?id=" + address_id + "/",
+            type: 'GET',
+            success: function (response) {
+          $("#" + address_id).parent("ul").parent("div").remove();
+          $("#tab-2").load(location.href + " #tab-2");
+          swal("Record is Deleted!", {
+            icon: "success",
+            timer: 3000,
+          });
+
+          
+        },
+        error: function () {
+            swal('Something is wrong, couldn\'t delete record',{
+                icon:"error",
+                timer:2000,
+            });
+        },
+        
+        cache: false,
+        contentType: false,
+        processData: false,
+        
+    });
+}
+    });
+    
+
+         
+        
+    
+      
+   
+});
+  $('.address-link').click(function (e){
+    if($("#id_addressName").val()=="")
+    {
+    $("#actionBtn").val("Save");
+    }
+  });
+  $('.change-address').click(function (e) {
+    e.preventDefault();
+    
+    
+    
+    var address_id = $(this).parent("div").parent("ul").children("input").attr("id");
+    console.log(address_id);
+    $.ajax({
+        url: "/edit?id=" + address_id + "/",
+        type: 'GET',
+        success: function (response) {
+          $("#id_addressName").val(response[0]["addressName"]);
+          $("#id_building").val(response[0]["building"]);
+          $("#id_street").val(response[0]["street"]);
+          $("#id_postalCode").val(response[0]["postalCode"]);
+          $("#id_landMark").val(response[0]["landMark"]);
+          $("#id_state").val(response[0]["state_id"]);
+          $("#id_city").val(response[0]["city_id"]);
+          $("#id_isDefault").prop("checked",response[0]["isDefault"]);
+          $("#updateId").val(address_id);
+          $("#actionBtn").val("Update");
+        },
+        error: function () {
+          alert('Something is wrong, couldn\'t delete record');
+        },
+
+        cache: false,
+        contentType: false,
+        processData: false,
+
+      });
+  });
+</script>
+</body>
+{% endblock %}
