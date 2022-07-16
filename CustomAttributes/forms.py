@@ -1,7 +1,7 @@
 from django import forms
 
 from .models import AttributeTranslate 
-from .models import AttributeFields
+from .models import AttributeField
 from .models import options,OptionTranslate
 from django.forms import formset_factory
 class AttributeTranslateForm(forms.ModelForm):
@@ -11,7 +11,7 @@ class AttributeTranslateForm(forms.ModelForm):
         fields = ('fieldLabel', 'languageId') 
 class AttributesFieldsForm(forms.ModelForm):
     class Meta:
-        model=AttributeFields
+        model=AttributeField
         fields=('code','inputType','attributeId','sortOrder','isRequired')
 class AttributeOptionForm(forms.ModelForm):
     class Meta:

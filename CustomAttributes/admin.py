@@ -1,6 +1,6 @@
 from lib2to3.pgen2.token import OP
 from django.contrib import admin
-from .models import AttributeFields
+from .models import AttributeField
 from .models import AttributeTranslate
 from .forms import AttributeTranslateForm,AttributesFieldsForm
 from languages.models import language
@@ -16,7 +16,7 @@ from django.http import HttpResponseRedirect
 # Register your models here.
 class AttributeFieldsAdmin(admin.ModelAdmin):
     def changelist_view(self, request, extra_context=None):
-        fieldsData=AttributeFields.objects.all()
+        fieldsData=AttributeField.objects.all()
         fieldsLabelData=AttributeTranslate.objects.all()
         customAttributesData=options.objects.all().order_by("sortOrder")
         customAttributesLabelsData=options.objects.raw("select * from customattributes_options as co join customattributes_optiontranslate as cot on co.optionId=cot.optionId_id")
@@ -37,7 +37,7 @@ class AttributeFieldsAdmin(admin.ModelAdmin):
                 
                 if "updateContent" in request.POST:
                     AttributesFieldsForm(request.POST,instance=attributeFields).save()
-                    attribute=AttributeFields.objects.get(code=request.POST.get("code"))
+                    attribute=AttributeField.objects.get(code=request.POST.get("code"))
                     
 
 
@@ -50,7 +50,7 @@ class AttributeFieldsAdmin(admin.ModelAdmin):
                         updateLabels.fieldId=attribute
                         updateLabels.save()
                     optionsData=options.objects.filter(fieldId_id=obj_id)
-                    getInputType=AttributeFields.objects.filter(code=request.POST.get("code"))
+                    getInputType=AttributeField.objects.filter(code=request.POST.get("code"))
                     
                     for i in getInputType:
                         if i.inputType=="boolean" or i.inputType=="textbox" or i.inputType=="textarea":
@@ -106,7 +106,7 @@ class AttributeFieldsAdmin(admin.ModelAdmin):
                     
                 else:
                     AttributesFieldsForm(request.POST).save()
-                    attribute=AttributeFields.objects.get(code=request.POST.get("code"))
+                    attribute=AttributeField.objects.get(code=request.POST.get("code"))
                     for langs in languageList:
                         
                         saveLabels=AttributeTranslate()
@@ -167,11 +167,11 @@ class AttributeFieldsAdmin(admin.ModelAdmin):
             return super().changeform_view(request, obj_id, form_url,{'label':label,'attributeTranslateForm':attributeTranslateForm,'languageList':languageList,'attributeFieldsForm':attributeFieldsForm,'formset': formset,'optionFormset':optionFormSet})
         else:
             label="update"
-            attributeFields=AttributeFields.objects.get(attributeId=obj_id)
+            attributeFields=AttributeField.objects.get(attributeId=obj_id)
             attributeTranslateLabel=AttributeTranslate.objects.filter(fieldId=attributeFields)
             attributeFieldsForm=AttributesFieldsForm(instance=attributeFields)
             attributeTranslateForm=AttributeTranslateForm()
-            data=AttributeFields.objects.raw("select attributeId,optionsLabel,optionTranslateId,code,optionId,customOption,attributeId,languageId_id from CustomAttributes_attributefields as at join customattributes_options as ao on at.attributeId=ao.fieldId_id join customattributes_optiontranslate as aot on ao.optionId=aot.optionId_id where at.attributeId="+obj_id+";")
+            data=AttributeField.objects.raw("select attributeId,optionsLabel,optionTranslateId,code,optionId,customOption,attributeId,languageId_id from CustomAttributes_attributefields as at join customattributes_options as ao on at.attributeId=ao.fieldId_id join customattributes_optiontranslate as aot on ao.optionId=aot.optionId_id where at.attributeId="+obj_id+";")
             customData=options.objects.filter(fieldId_id=obj_id)
             no_data=True
             
@@ -184,4 +184,4 @@ class AttributeFieldsAdmin(admin.ModelAdmin):
 class AttributeTranslateAdmin(admin.ModelAdmin):
     list_per_page =5
     list_display = ['fieldLabel','languageId']
-admin.site.register(AttributeFields,AttributeFieldsAdmin)
+admin.site.register(AttributeField,AttributeFieldsAdmin)

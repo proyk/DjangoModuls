@@ -29,9 +29,10 @@ class customer(models.Model):
     contactNo = models.CharField(('Mobile Number'),max_length=10, null=False, blank=False, unique=True)
     email = models.EmailField(('email Id'),null=False, blank=False, unique=True)
     profileImage = models.ImageField(('Profile Image'),upload_to='images/')
-    password = models.CharField(("Password"),max_length=50)
+    password = models.CharField(("Password"),max_length=250)
     customerGroup = models.ForeignKey(group,on_delete=models.CASCADE,null=False,default=get_group)
     emailVarificationDate = models.DateTimeField(default=None,null=True,blank=True)
+    
     createdAt = models.DateTimeField(auto_now_add=True)
     updatedAt = models.DateTimeField(auto_now=True)
 

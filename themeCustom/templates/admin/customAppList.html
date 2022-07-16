@@ -1,11 +1,16 @@
 {% load i18n %}
 {% if app_list %}
 {% for app in app_list %}
+{% if app.name == "Pages" or app.name == "Customattributes" or app.name == "Banner" or app.name == "Block" or app.name == "Customattributes"  or app.name == "Languages" %}
+
+{%else%}
           <li class="nav-item">
             <a href="#" class="nav-link">
               <i class="nav-icon fas fa-list-alt"></i>
               <p>
+                
                 {{ app.name }}
+                
                 <i class="right fas fa-angle-left"></i>
               </p>
             </a>
@@ -20,5 +25,86 @@
                 {% endfor %}
                 </ul>
           </li>
+          {% endif %}
           {% endfor %}
           {% endif %}
+          <li class="nav-item">
+            <a href="#" class="nav-link">
+              <i class="nav-icon fas fa-list-alt"></i>
+              <p>
+                
+                CMS
+                
+                <i class="right fas fa-angle-left"></i>
+              </p>
+            </a>
+{% for app in app_list %}
+
+{% if app.name == "Pages"  or app.name == "Block" %}
+<ul class="nav nav-treeview">
+  {% for model in app.models %}
+  <li class="nav-item">
+    <a href="{{ model.admin_url }}" class="nav-link ">
+      <i class="far fa-circle nav-icon"></i>
+      <p>{{ model.name }}</p>
+    </a>
+  </li>
+  {% endfor %}
+  </ul>
+  {%endif%}
+  {% if app.name == "Banner"%}
+  <ul class="nav nav-treeview">
+    <li class="nav-item" >
+      <a href="#" class="nav-link">
+        <i class="far fa-image nav-icon"></i>
+        <p>
+          Banner
+          <i class="fas fa-angle-left right"></i>
+        </p>
+      </a>
+      <ul class="nav nav-treeview">
+        {% for model in app.models %}
+        <li class="nav-item" style="margin-left: 25px;">
+          <a href="{{ model.admin_url }}" class="nav-link">
+            <i class="fas fa-long-arrow-alt-right nav-icon"></i>
+            <p>{{model.name}}</p>
+          </a>
+        </li>
+        {%endfor%}
+        
+        
+      </ul>
+    </li>
+    
+    
+  </ul>
+
+  {%endif%}
+  {%endfor%}
+</li>
+<li class="nav-item">
+  <a href="#" class="nav-link">
+    <i class="nav-icon fas fa-list-alt"></i>
+    <p>
+      
+      System
+      
+      <i class="right fas fa-angle-left"></i>
+    </p>
+  </a>
+{% for app in app_list %}
+
+{% if app.name == "Customattributes"  or app.name == "Languages" %}
+<ul class="nav nav-treeview">
+{% for model in app.models %}
+<li class="nav-item">
+<a href="{{ model.admin_url }}" class="nav-link ">
+<i class="far fa-circle nav-icon"></i>
+<p>{{ model.name }}</p>
+</a>
+</li>
+{% endfor %}
+</ul>
+{%endif%}
+{%endfor%}
+</li>     

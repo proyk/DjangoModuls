@@ -1,7 +1,9 @@
 from django.shortcuts import render
-from .models import customerAddress,customer
+from .models import customerAddress,customer,city
 from django.http import  JsonResponse
+import pytz
 
+utc=pytz.UTC
 from datetime import datetime
 # Create your views here.
 def delete(request):
@@ -18,9 +20,33 @@ def verifyEmail(request):
     nm=request.GET["code"].split("-")
     data =customer.objects.filter(firstName=nm[0]).filter(emailVarificationDate=None)
     status=""
-    if data.count()==0:
-        status="Already Verified !!"
+    print(nm[1])
+    nowTime=datetime.now().strftime("%Y%m%d%H%M%S")
+    if nowTime>=nm[1]:
+        title="Expired !!"
+        status="Email Verification Link Expire!"
+        icons="error"
     else:
-        status="Email Verification Successfully......!!!"
+
+        if data.count()==0:
+            title="Verified!!"
+            status="Already Verified !!"
+            icons="success"
+        else:
+            title="Verified!!"
+            status="Email Verification Successfully......!!!"
+            icons="success"
+                
+    if icons=="success":
         customer.objects.filter(firstName=nm[0]).update(emailVarificationDate=datetime.now())
-    return render(request,"doneVerify.html",{"status":status})
+    return render(request,"doneVerify.html",{"title":title,"status":status,"icons":icons})
+
+def getcitiesajax(request):
+    if request.method == "POST":
+        stateName = request.POST['statename']
+        cities = city.objects.all().filter(stateName=stateName)
+        
+        return JsonResponse(list(cities.values('cityId', 'cityName')), safe = False)  
+
+
+

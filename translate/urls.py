@@ -19,12 +19,14 @@ from django.conf import settings
 from django.conf.urls.static import static
 from django.contrib.staticfiles.urls import staticfiles_urlpatterns
 from customers import views
-
+from block import views as vv
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('delete/',views.delete,name='delete'),
     path('edit/',views.edit,name='edit'),
     path('verifyEmail',views.verifyEmail,name='verifyEmail'),
+    path('getcitiesajax/', views.getcitiesajax, name="getcitiesajax"),
+    path('displayBlock/',vv.displayBlock,name="displayBlock"),
     path('',include("pages.urls")),
     
 ]

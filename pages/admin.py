@@ -1,6 +1,7 @@
 from asyncio.windows_events import NULL
 from turtle import title, update
 from django.contrib import admin
+from django.conf import settings
 from django.contrib import messages
 from django.http import HttpResponseRedirect
 from pages.models import page
@@ -16,8 +17,13 @@ class ContentInline(admin.StackedInline):
 
 
 class PageAdmin(admin.ModelAdmin):
-    list_display = ['slug','created_at','updated_at']
-    
+    list_display = ['slug','customCreatedAt','customUpdatedAt']
+    def customCreatedAt(self,obj):
+        return obj.created_at.strftime(settings.DATETIME_FORMAT)
+    customCreatedAt.short_description="Created At"
+    def customUpdatedAt(self,obj):
+        return obj.updated_at.strftime(settings.DATETIME_FORMAT)
+    customUpdatedAt.short_description="Updated At"
     def changeform_view(self, request, obj_id, form_url, extra_context=None):
         global pages
         

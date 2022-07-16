@@ -1,0 +1,257 @@
+{% extends "admin/change_form.html" %}
+{% load static %}
+{% load test %}
+
+{% block extrastyle %}{{ block.super }}
+<link rel="stylesheet" href="https://code.jquery.com/ui/1.13.1/themes/base/jquery-ui.css">
+<style>
+    .error{
+        color:red;
+    }   
+</style>
+<script src="https://code.jquery.com/jquery-3.6.0.js"></script>
+<script src="https://code.jquery.com/ui/1.13.1/jquery-ui.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.0/jquery.validate.min.js"> </script>
+<script>
+$( function() {
+  $( "#tabs" ).tabs();
+  $(".tabs").tabs();
+} );
+
+</script>
+<script>  
+    $(document).ready (function () {  
+        $("#BannerForm").validate({
+            rules:{
+                sort_order:{
+                    min:1,
+                },
+                bannerGroups:"required",
+            },
+            messages:{
+                sort_order:"Please Enter Number !!",
+                bannerGroups:"Please Select At least 1 or more Group !!",
+            }
+        });
+        $( ".title-req" ).rules( "add", {
+        required: true,
+        messages: {
+            required: "Title is Required!!!",
+        }
+        });
+        $( ".content-req" ).rules( "add", {
+        required: true,
+        messages: {
+            required: "Content is Required!!!",
+        }
+        });
+    });
+    
+    </script>
+{% endblock %}
+{% block content %}
+<body class="hold-transition sidebar-mini layout-fixed ml-4">
+    <div class="content-wrapper">
+    <form action="" id="BannerForm" enctype="multipart/form-data"  method="post">
+        {% csrf_token %}
+    <div>
+        <div class="tabs">
+          <ul>
+              <li><a href="#tab-2" class="selected">Banner Translation</a></li>
+            <li><a href="#tab-1" class="">Banner</a></li>
+            
+          </ul>
+          <div id="tab-2">
+            <div>
+              
+              <div class="tabs">
+                <ul>
+                    {% for language in languages %}
+                        <li><a href="#{{language}}">{{language}}</a></li>
+                    {% endfor %}
+                  
+                </ul>
+                    {% if label == "add" %}
+                    {% for lang in languages%}
+                        <div class="page-table" id="{{lang}}">
+                            <table style="width: 100%;">
+                                
+                                <tr>
+                                    <td>Title</td>
+                                    <td><input type="text" name="{{lang}}title" class="form-control  title-req required" maxlength="100"  id="id_title{{lang}}"></td>
+                                </tr>
+                                <tr>
+                                    <td>Content</td>
+                                    <td><input type="text" style="height: 100px;width: 400;" name="{{lang}}content" class="form-control content-req required" maxlength="100"  id="id_content{{lang}}"></td>
+                                </tr>
+                            </table>
+                        </div>
+                    {% endfor %}
+                    {% endif %}
+                    {% if label == "update" %}
+                        {% for lang in languages%}
+                            {% for data in BannerData%}
+                                {% if lang.locale == data.language_id %}
+                                    <div id="{{lang}}">
+                                        <input type="hidden" name="{{lang}}id" value="{{data.BannnerTransId}}">
+                                        <table style="width: 100%;">
+                                            <tr>
+                                                <td>Title :</td>
+                                                <td><input type="text" class="form-control-sm" name="{{lang}}title" maxlength="100" value="{{data.title}}"  id="id_name"></td>
+                                            </tr>
+                                            <tr>
+                                                <td>Content :</td>
+                                                <td><input type="text" style="height: 100px;width: 400;"  class="form-control-sm" name="{{lang}}content" maxlength="100" value="{{data.content}}"  id="id_name"></td>
+                                            </tr>
+                                        </table>
+                                    </div>
+                                
+                            
+                                {% endif %}
+                        
+                
+                            {% endfor %}
+                        {% endfor %}
+                    {% endif %}  
+              </div>
+            </div>
+          </div>
+          <div id="tab-1">
+            <div>
+                
+                <table class="page-table" style="width: 100%;">
+                    
+                    <tr>
+                        <td>Sort Order:</td>
+                        <td>{{bannerForm.sort_order | add_class:"form-control required"}}</td>
+                    </tr>
+                    <tr>
+                        <td>Status :</td>
+                        <td>{{bannerForm.status | add_class:"form-control"}}</td>
+                    </tr>
+                    <tr>
+                        <td>
+                            Is Featured?
+                        </td>
+                        <td>{{bannerForm.isFeatured}}</td>
+                    </tr>
+                    <tr>
+                        <td>
+                            Banner Groups
+                        </td>
+                        <td>
+                            {{bannerForm.bannerGroups|add_class:"form-control"}}
+                        </td>
+                    </tr>
+
+                    
+                </table>
+                <table id="bannerImageTab" style="width: 100%;" cellpadding="15" >
+                    <tr>
+                        
+                        <th>
+                            Banner Group
+                        </th>
+                        <th>
+                            Banner Image
+                        </th>
+                        <th>
+                            Banner URL
+                        </th>
+                    </tr>
+                    {% if label == "update" %}
+                    {% for updateData in BannerImageForm %}
+                    <tr class="added-{{updateData.BannerGroupId}}">
+                        
+                        <td>
+                            <input type="hidden" value="{{updateData}}" name="{{updateData.code}}updateImageId">
+                            <strong>{{updateData.code}}</strong>
+                        </td>
+                        <td>
+                            
+                            <img src="/media/images/{{updateData.image}}" width="50" height="50" style="float: left;">
+                            <input type="file" name="{{updateData.code}}image" accept="image/*" class=" form-control" id="id_image" >
+                        </td>
+                        <td>
+                            <input type="url" value="{{updateData.url}}" class="form-control" name="{{updateData.code}}url">
+                        </td>
+                    </tr>
+                    {%endfor%}
+                    {%endif%}
+                    <input type="hidden" name="countData" id="id_count" value="0">
+                </table>
+
+            </div>
+          </div>
+          
+        </div>
+      </div>
+
+    
+  
+   
+    
+
+<div id="tabs" class="text-center">
+    {% if label == "update" %}
+    <input type="submit" class="btn btn-primary form-control" name="updateContent" value="Update"/>
+    {% elif label == "add" %}
+    <input type="submit" class="btn btn-primary form-control" name="saveContent" value="Save"/>
+    {% endif %}
+</div>
+</form>
+</div>
+<script>
+    $("#id_bannerGroups").change(function(){
+        
+            thisSelect = $(this).val();
+            
+            thisSelectedvals = []
+            $("#id_bannerGroups option:selected").each(function()
+            {
+                thisSelectedvals.push($.trim(($(this).text())));
+                
+            });
+            
+            
+            var count=thisSelect.length;
+            $("#id_count").val(count);
+            console.log("selected",thisSelect);
+            
+            for(i=0;i<count;i++){
+                if($(".added-"+thisSelect[i]+"").length > 0)
+                {
+                    //alert("123");
+                    
+                }
+                
+                else{
+
+                
+                var html = `<tr class="added-${thisSelect[i]}">
+                <td><strong>${thisSelectedvals[i]}</strong></th>
+                    
+                <td><input type="file"  id="bannerimage[${i}]" class="form-control" name="bannerimage[${i}]" accept="image/*" required></td>
+                <td><input type="url"  id="url[${i}]" name="url[${i}]" class="form-control" required></td>
+                <input type="hidden"  id="bannergrpid[${i}]" name="bannergrpid[${i}]" value="${thisSelect[i]}" required>
+                
+                </tr>`;
+                
+                $("#bannerImageTab").append(html);
+            }
+            }
+            $("#id_bannerGroups option:not(:selected)").each(function()
+            {
+                
+                
+                $(".added-"+$(this).val()+"").remove();
+            });
+        })
+</script>
+</body>
+<br>
+<br>
+<br>
+
+
+{% endblock %}

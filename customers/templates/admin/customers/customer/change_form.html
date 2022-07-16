@@ -7,15 +7,193 @@
 <style>
     .error{
         color:red;
+    }   
+    #password-strength-status {
+        padding: 5px 10px;
+        color: #FFFFFF;
+        border-radius: 4px;
+        margin-top: 5px;
     }
-</style>
+
+    .medium-password {
+        background-color: #b7d60a;
+        border: #BBB418 1px solid;
+    }
+
+    .weak-password {
+        background-color: #ce1d14;
+        border: #AA4502 1px solid;
+    }
+
+    .strong-password {
+        background-color: #12CC1A;
+        border: #0FA015 1px solid;
+    }
+</style>        
 <script src="https://code.jquery.com/jquery-3.6.0.js"></script>
 <script src="https://code.jquery.com/ui/1.13.1/jquery-ui.js"></script>
 
 <script>
 $( function() {
+    $("#id_state").change(function () {
+    console.log("hello hello")
+    const statename = $(this).val();
+    console.log(statename) 
+    $.ajax({                                // initialize an AJAX request
+        type: "POST",
+        url: "/getcitiesajax/",
+        data: {
+            'statename': statename,      
+            'csrfmiddlewaretoken':$('input[name=csrfmiddlewaretoken]').val(),
+        },
+        
+        success: function (data) {          // `data` is from `getcitiesajax` view function
+            let html_data = '<option value="">---------</option>';
+            data.forEach(function (data) {
+                html_data += `<option value="${data.cityId}">${data.cityName}</option>`
+            });
+            $("#id_city").html(html_data);   // replace the contents of the topic input with the data that came from the server
+        }
+    });
+
+    });
   $( "#tabs" ).tabs();
   $(".tabs").tabs();
+  var count=$('[id^=myform]').length-1;
+    console.log(count)
+    
+    
+    $("#add-new").click(function () {
+      console.log("clicked")
+      count++;
+      if (count<10){
+        
+          var html = `<div id="myform[${count}]">
+                                                  <hr>
+                                                  Address [${count}]
+                                                  <hr>
+                                                  <table style="width: 100%;" cellpadding="10px">
+                                                       <tr>
+                                                           <th>
+                                                               <input type="hidden" id="counter" name="counter" value="${count}"/>
+                                                               <label>Address Name:</label>
+                                                           </th>
+                                                           <th>
+                                                               <label>Building:</label>
+                                                           </th>
+                                                           
+                                                           
+                                                       </tr>
+                                                       <tr>
+                                                           <td>
+                                                               <input type="text" name="Address[${count}][addressname]" maxlength="100" class="form-control  required" required  id="id_addressName[${count}]">
+                                                               
+                                                           </td>
+                                                           <td>
+                                                               <input type="text" name="Address[${count}][building]" maxlength="200" class="form-control  required" required   id="id_building[${count}]">
+                                                           </td>
+                                                           
+                                                           
+                                                       </tr>
+                                                       <tr>
+                                                           <th>
+                                                               <label>Street:</label>
+                                                           </th>
+                                                           <th>
+                                                               <label>Postal Code:</label>
+                                                           </th>
+                                                           
+                                                       </tr>
+                                                       <tr>
+                                                           <td>
+                                                               <input type="text" name="Address[${count}][street]" maxlength="200" class="form-control  required" required  id="id_street[${count}]">
+                                                           </td>
+                                                           <td>
+                                                               <input type="number" name="Address[${count}][postalCode]" class="form-control required" required  id="id_postalCode[${count}]">
+                                                           </td>
+                                                       </tr>
+                                                       <tr>
+                                                           <th>
+                                                               <label>Landmark:</label>
+                                                           </th>
+                                                           <th>
+                                                               <label>Is default:</label>
+                                                           </th>
+                                                           
+                                                       </tr>
+                                                       <tr>
+                                                           <td>
+                                                               <input type="text" name="Address[${count}][landMark]" maxlength="200" class="form-control  required" required  id="id_landMark[${count}]">
+                                                           </td>
+                                                           <td>
+                                                               <input type="checkbox" name="Address[${count}][isDefault]" id="id_isDefault">
+                                                           </td>
+                                                       </tr>
+                                                       <tr>
+                                                           <th>
+                                                               <label>State:</label>
+                                                           </th>
+                                                           <th>
+                                                               <label>City:</label>
+                                                           </th>
+                                                           
+                                                       </tr>
+                                                       <tr>
+                                                           <td>
+                                                               <select name="Address[${count}][state]" class="form-control required" required id="Address[${count}][state]">
+                                 <option value="" selected>---------</option>
+                                 {% for data in states %}
+                                  <option value="{{data.stateId}}">{{data}}</option>
+                                  {% endfor %}                          
+                               
+                               </select>
+                                                           </td>
+                                                           <td>
+                                                               <select name="Address[${count}][city]" class="form-control required" required id="Address[${count}][city]">
+                                 <option value="" selected>---------</option>
+                               
+                               
+                               </select>
+                                                           </td>
+                                                       </tr>
+                                                   </table>
+                                               </div>`;
+          
+          $("#address-new").append(html);
+          
+      
+      $(".delete-form").click(function(){
+      count--;
+      $(event.target).closest("div").parent().remove();
+            
+    });
+    
+    $("#address\\[" + count + "\\]\\[state\\]").change(function () {
+    console.log("hello hello")
+    const statename = $(this).val();
+    console.log(statename) 
+    $.ajax({                                // initialize an AJAX request
+        type: "POST",
+        url: "/getcitiesajax/",
+        data: {
+            'statename': statename,      
+            'csrfmiddlewaretoken':$('input[name=csrfmiddlewaretoken]').val(),
+        },
+        
+        success: function (data) {          // `data` is from `getcitiesajax` view function
+            let html_data = '<option value="">---------</option>';
+            data.forEach(function (data) {
+                html_data += `<option value="${data.cityId}">${data.cityName}</option>`
+            });
+            $("#Address\\[" + count + "\\]\\[city\\]").html(html_data);   // replace the contents of the topic input with the data that came from the server
+        }
+    });
+
+    });
+    
+}
+    });
+    
 } );
 
 </script>
@@ -25,25 +203,62 @@ $( function() {
     $(document).ready (function () {  
         $('#customerForm').validate({
             rules:{
+
                 firstName:"required",
                 lastName:"required",
-                contactNo:"required",
+                contactNo:{
+                    required:true,
+                    maxlength:10,
+                    minlength:10,
+                    digits: true,
+                },
                 email:"required",
                 profileImage:"required",
                 password:"required",
                 addressName:"required",
+                building:"required",
+                street:"required",
+                postalCode:{
+                    required:true,
+                    maxlength:6,
+                    minlength:6,
+                },
+                landMark:"required",
+                state:"required",
+                city:"required",
+                customerGroup:"required",
             },
             messages:{
                 firstName:"Please Enter First Name",
                 lastName:"Please Enter Last Name",
-                contactNo:"Please Enter Contact Number",
+                contactNo:{
+                    required:"Please Enter Contact Number",
+                    maxlength:"Contact No is must be 10 Digit Not More than 10.",
+                    minlength:"Contact no is not less than 10.",
+                },
                 email:"Please Enter Email",
                 profileImage:"Please Select Image For Profile",
                 password:"Please Enter Password",
-                addressName:"Please Enter Address Name"
+                addressName:"Please Enter Address Name",
+                building:"Please Enter Building",
+                street:"Please Enter Street",
+                postalCode:{
+                    required:"Please Enter Postal Code",
+                },
+                landMark:"Please Enter Landmark",
+                state:"Please Select State",
+                city:"Please Select City",
+                customerGroup:"Please Select Customer Group"
             },
         
         });
+        
+        $("#id_addressNameCust").rules("add", {
+         required:true,
+         messages: {
+                required: "Please Enter AddessName"
+         }
+      });
     });
 </script>
 <script src=
@@ -75,7 +290,8 @@ $( function() {
             </div>
               </ul>
               <div id="tab-2">
-                <div>
+                <div id="address-new">
+                <div id="myform[0]">
                                                   
                    <table style="width: 100%;" cellpadding="10px">
                         <tr>
@@ -152,6 +368,10 @@ $( function() {
                         </tr>
                     </table>
                 </div>
+                </div>
+                {% if lbl == "Update" %}
+                <button type="button" class="btn btn-primary" id="add-new">Add</button>
+                {%endif%}
                 <hr>
                 <div  class="row">
                     {% for data in addressData %}
@@ -180,7 +400,64 @@ $( function() {
               </div>
               <div id="tab-1">
                 <div>
-                   
+                    {% if lbl == "add" %}
+                    <table  style="width: 100%;" cellpadding="10px">
+                        <tr>
+                         <th>
+                             <label>First Name*</label>
+                             </th>
+                             <th>
+                                 <label>Last Name*</label>
+                                 </th>
+                         
+                        </tr>
+                        <tr>
+                         <td>{{customerForm.firstName|add_class:"form-control "}}</td>
+                         <td>{{customerForm.lastName|add_class:"form-control"}}</td>
+                        </tr>
+                        <tr>
+                         <th>
+                             <label>Contact No*</label>
+                             </th>
+                             <th>
+                                 <label>Email*</label>
+                                 </th>
+                         
+                        </tr>
+                        <tr>
+                         <td>{{customerForm.contactNo|add_class:"form-control"}}</td>
+                         <td>{{customerForm.email|add_class:"form-control"}}</td>
+                         
+                        </tr>
+                        <tr>
+                         <th>
+                             <label>Profile Image*</label>
+                         </th>
+                         <td>{{customerForm.profileImage|add_class:"form-control"}}</td>
+                             
+                        </tr>
+                        <tr>
+                         <th>
+                             <label>Password*</label>
+                             </th>
+                             <th>
+                                 <label>Customer Group*</label>
+                                 </th>
+                         
+                        </tr>
+                        <tr>
+                         <td><input type="password" name="password" value="{% if lbl == 'Update' %} {{passData}} {% endif%}" maxlength="50" class="required form-control valid" required="" id="id_password" aria-invalid="false">
+                             <div id="password-strength-status"></div>
+                             </td>
+                         <td>{{customerForm.customerGroup|add_class:"form-control"}}</td>
+                        </tr>
+                        
+                        </tr>
+                        
+     
+                     </table>
+                    {% else %}
+                   {% for iData in CustomerData %}
                     <table  style="width: 100%;" cellpadding="10px">
                    <tr>
                     <th>
@@ -192,8 +469,13 @@ $( function() {
                     
                    </tr>
                    <tr>
-                    <td>{{customerForm.firstName|add_class:"form-control "}}</td>
-                    <td>{{customerForm.lastName|add_class:"form-control"}}</td>
+                    
+                    <td>
+                        <input type="text" name="firstName" value="{{iData.firstName}}" maxlength="100" class="form-control required" required="" id="id_firstName">
+                    </td>
+                    <td>
+                        <input type="text" name="lastName" value="{{iData.lastName}}" maxlength="100" class="required form-control" required="" id="id_lastName">
+                    </td>
                    </tr>
                    <tr>
                     <th>
@@ -205,14 +487,22 @@ $( function() {
                     
                    </tr>
                    <tr>
-                    <td>{{customerForm.contactNo|add_class:"form-control"}}</td>
-                    <td>{{customerForm.email|add_class:"form-control"}}</td>
+                    
+                        <td><input type="text" name="contactNo" value="{{iData.contactNo}}" maxlength="10" class="required form-control" required="" id="id_contactNo"></td>
+                        <td><input type="email" name="email" value="{{iData.email}}"  maxlength="254" class="required form-control" required="" id="id_email"></td>
+                    
                    </tr>
                    <tr>
                     <th>
                         <label>Profile Image*</label>
-                        </th>
-                    <td>{{customerForm.profileImage|add_class:"form-control"}}</td>
+                        
+                        <img id="pfImage" src="/media/{{iData.profileImage}}" height="50" width="50" style="float: right;" >
+                        
+                    </th>
+                        <td>
+                            <input type="file"  name="profileImage" accept="image/*" value="/media/{{iData.profileImage}}" class="form-control" id="id_profileImage">
+                        </td>
+                        
                    </tr>
                    <tr>
                     <th>
@@ -224,20 +514,19 @@ $( function() {
                     
                    </tr>
                    <tr>
-                    <td>{{customerForm.password|add_class:"form-control"}}</td>
-                    <td>{{customerForm.customerGroup|add_class:"form-control"}}</td>
+                    <td><div id="password-strength-status"></div>
+                        <input type="password" name="password" value="{{passData}}" maxlength="50" class="required form-control valid" required="" id="id_password" aria-invalid="false">
+                        
+                        </td>
+                    <td>{{customerForm.customerGroup|add_class:"form-control error"}}</td>
                    </tr>
                    
-                   <tr>
-                    <th>
-                        <label>Send Email For Verification </label>
-                        </th>
-                    <td>
-                        <input type="checkbox" name="emailVerified">
-                    </td>
                    </tr>
+                   
 
                 </table>
+                {% endfor %}
+                {%endif%}
                 </div>
               </div>
               
@@ -246,8 +535,29 @@ $( function() {
           </div>
         </form>
 </div>
-
 <script>
+    $(document).ready(function () {
+        $("#id_password").on('keyup', function(){
+          var number = /([0-9])/;
+          var alphabets = /([a-zA-Z])/;
+          var special_characters = /([~,!,@,#,$,%,^,&,*,-,_,+,=,?,>,<])/;
+          if ($('#id_password').val().length < 6) {
+              $('#password-strength-status').removeClass();
+              $('#password-strength-status').addClass('weak-password');
+              $('#password-strength-status').html("Weak (should be atleast 6 characters.)");
+          } else {
+              if ($('#id_password').val().match(number) && $('#id_password').val().match(alphabets) && $('#id_password').val().match(special_characters)) {
+                  $('#password-strength-status').removeClass();
+                  $('#password-strength-status').addClass('strong-password');
+                  $('#password-strength-status').html("Strong");
+              } else {
+                  $('#password-strength-status').removeClass();
+                  $('#password-strength-status').addClass('medium-password');
+                  $('#password-strength-status').html("Medium (should include alphabets, numbers and special characters or some combination.)");
+              }
+          }
+        });
+      }); 
     $('.del-address').click(function (e) {
     e.preventDefault();
     
